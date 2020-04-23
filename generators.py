@@ -7,6 +7,9 @@ import cv2
 class Drawer:
   """
   Generator of geometric shapes
+  Args:
+  - height, weight - shape of image
+  - channels - number of channels in image
   """
   def __init__(self, height=128, width=128, channels=3):
     self._height = height
@@ -14,8 +17,9 @@ class Drawer:
     self._channels = channels
     self._draw_method = {
       "rectangle": self.drawRectangle,
-      "square": self.drawRectangle,
-      "triangle": self.drawTriangle
+      "square": self.drawSquare,
+      "triangle": self.drawTriangle,
+      "circle": self.drawCircle,
     }
 
 
@@ -33,6 +37,18 @@ class Drawer:
     cv2.rectangle(self.image, tuple(corners[:, 0]), tuple(corners[:, 1]), color, -1)
 
 
+  def drawSquare(self, pad=10):
+    color = tuple(randint(0, 255, dtype=int) for _ in range(self._channels))
+    center = randint(pad, self._height - pad, 2)
+    max_size = randint(0, min([
+      center[0] - pad,
+      center[1] - pad,
+      self._height - pad - center[0],
+      self._width - pad - center[1]
+    ])) + pad
+    cv2.rectangle(self.image, tuple(center - max_size), tuple(center + max_size), color, -1)
+
+
   def drawTriangle(self, pad=10):
     color = tuple(randint(0, 255, dtype=int) for _ in range(self._channels))
     fig = np.array([
@@ -40,6 +56,18 @@ class Drawer:
       randint(pad, self._width - pad, 3)
     ], dtype=int).T
     cv2.fillPoly(self.image, [fig], color)
+
+
+  def drawCircle(self, pad=10):
+    color = tuple(randint(0, 255, dtype=int) for _ in range(self._channels))
+    center = randint(pad, self._height - pad, 2)
+    radius = randint(0, min([
+      center[0] - pad,
+      center[1] - pad,
+      self._height - pad - center[0],
+      self._width - pad - center[1]
+    ])) + pad
+    cv2.circle(self.image, tuple(center), radius, color, -1)
 
 
   def GenerateImage(self, fig="square"):
@@ -61,5 +89,5 @@ class Drawer:
 
     return self.image
 
-Drawer().GenerateImage()
+Drawer().GenerateImage("circle")
 
