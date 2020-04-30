@@ -53,7 +53,7 @@ class Drawer:
       center[1] - pad,
       self._height - pad - center[0],
       self._width - pad - center[1]
-    ])) + pad
+    ])) + pad // 2
     cv2.rectangle(self.image, tuple(center - max_size), tuple(center + max_size), color, -1)
     cv2.rectangle(self.mask, tuple(center - max_size), tuple(center + max_size), self._mask_color["square"], -1)
 
@@ -76,7 +76,7 @@ class Drawer:
       center[1] - pad,
       self._height - pad - center[0],
       self._width - pad - center[1]
-    ])) + pad
+    ])) + pad // 2
     cv2.circle(self.image, tuple(center), radius, color, -1)
     cv2.circle(self.mask, tuple(center), radius, self._mask_color["circle"], -1)
 
@@ -85,7 +85,7 @@ class Drawer:
     if fig not in self._draw_method.keys():
       raise ValueError(f"fig should be one of this: {self._draw_method.keys():}")
 
-    self.mask = np.zeros((self._height, self._width, 1), dtype=np.uint8)
+    self.mask = np.zeros((self._height, self._width), dtype=np.uint8)
     self.image = np.empty((self._height, self._width, 0), dtype=np.uint8)
     for _ in range(self._channels):
       self.image = np.append(
