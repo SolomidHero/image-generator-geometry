@@ -111,4 +111,7 @@ class Drawer:
     return self
 
   def get(self, masked=True):
-    return self.image, self.mask
+    if masked:
+      return self.image, self.mask
+
+    return self.image
