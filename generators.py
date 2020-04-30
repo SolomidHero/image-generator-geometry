@@ -30,6 +30,13 @@ class Drawer:
     }
 
 
+  def randomPoint(self, pad=10):
+    return np.array([
+      randint(pad, self._height - pad),
+      randint(pad, self._width - pad)
+    ])
+
+
   def addNoise(self, std=20):
     self.image += sps.norm(scale=std).rvs(self.image.shape).astype(np.uint8)
     self.image = self.image.clip(0, 255)
@@ -47,13 +54,13 @@ class Drawer:
 
   def drawSquare(self, pad=10):
     color = tuple(randint(0, 255, dtype=int) for _ in range(self._channels))
-    center = randint(pad, self._height - pad, 2)
-    max_size = randint(0, min([
-      center[0] - pad,
-      center[1] - pad,
-      self._height - pad - center[0],
-      self._width - pad - center[1]
-    ])) + pad // 2
+    center = self.randomPoint()
+    max_size = randint(pad // 2, min([
+      center[0],
+      center[1],
+      self._height - center[0],
+      self._width - center[1]
+    ]))
     cv2.rectangle(self.image, tuple(center - max_size), tuple(center + max_size), color, -1)
     cv2.rectangle(self.mask, tuple(center - max_size), tuple(center + max_size), self._mask_color["square"], -1)
 
@@ -70,13 +77,13 @@ class Drawer:
 
   def drawCircle(self, pad=10):
     color = tuple(randint(0, 255, dtype=int) for _ in range(self._channels))
-    center = randint(pad, self._height - pad, 2)
-    radius = randint(0, min([
-      center[0] - pad,
-      center[1] - pad,
-      self._height - pad - center[0],
-      self._width - pad - center[1]
-    ])) + pad // 2
+    center = self.randomPoint()
+    radius = randint(pad // 2, min([
+      center[0],
+      center[1],
+      self._height - center[0],
+      self._width - center[1]
+    ]))
     cv2.circle(self.image, tuple(center), radius, color, -1)
     cv2.circle(self.mask, tuple(center), radius, self._mask_color["circle"], -1)
 
