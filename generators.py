@@ -108,6 +108,9 @@ class Drawer:
         axis=2
       )
 
+    for fig in figs:
+      self._draw_method[fig]()
+
     return self
 
   def get(self, masked=True):
