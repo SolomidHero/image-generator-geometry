@@ -107,7 +107,6 @@ class Drawer:
         np.full((self._height, self._width, 1), np.uint8(randint(0, 255))),
         axis=2
       )
-    self.addNoise()
 
     return self
 
