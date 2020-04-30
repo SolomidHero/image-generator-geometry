@@ -83,11 +83,5 @@ class Drawer:
 
     self.addNoise()
 
-    cv2.imshow(f"some_{fig}", self.image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     return self.image
-
-Drawer().GenerateImage("circle")
 
